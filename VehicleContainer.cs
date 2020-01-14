@@ -1,135 +1,144 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+ 
 [System.Serializable]
 public class VehicleContainer
-    {
+{
+ 
     Vehicle vehicle;
-
-    public void makeShip(string type)
+ 
+    // https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions for all of these public methods and properties
+    public void MakeShip(string type)
+    {
+        // You could use a switch/case here, especially if you're going to add more
+        switch (type.ToUpper())
         {
-        type = type.ToUpper();
-
-        if (type == "CARAVEL")
-            vehicle = new Caravel();
-        else if (type == "KOGGE")
-            vehicle = new Kogge();
-        else 
-            makeShip();
+            case "CARAVEL":
+                vehicle = new Caravel();
+                break;
+            case "KOGGE":
+                vehicle = new Kogge();
+                break;
+            default:
+                MakeShip();
+                break;
         }
-
-
-    public void makeShip()
-        {
+    }
+ 
+ 
+    public void MakeShip()
+    {
         vehicle = new Ship();
-        }
-
-
-    public void setVehicle(VehicleContainer s)
+    }
+ 
+ 
+    public void SetVehicle(VehicleContainer s)
+    {
+        vehicle = s.TransferVehicle();
+    }
+ 
+ 
+    public Vehicle TransferVehicle()
+    {
+        if (this.HasVehicle)
         {
-        vehicle = s.transferVehicle();
-        }
-
-
-    public Vehicle transferVehicle()
-        {
-        if (hasVehicle())
-            {
             var result = vehicle;
             vehicle = null;
             return result;
-            }
-        else
-            return null;
         }
-
-
-    public Vehicle getVehicle()
-        {
+        // No need for the else 
+        return null;
+    }
+ 
+    public Vehicle GetGetVehicle()
+    {
         return vehicle;
-        }
-
-
-    public bool hasVehicle()
-        {
-        if (vehicle != null)
-            return true;
-
-        return false;
-        }
-
-
+    }
+ 
+    public bool HasVehicle => vehicle != null;
+ 
+ 
     [System.Serializable]
     public abstract class Vehicle : SkaldObject
+    {
+        protected Vehicle() : base() { }
+ 
+        private string _modelPath = string.Empty;
+        public string ModelPath
         {
-        protected string modelPath;
-        protected bool chartered = false;
-
-        protected Vehicle() : base() {}
-
-        public string getModelPath()
+            get
             {
-            return modelPath;
+                return _modelPath;
             }
-
-        public bool isChartered()
+            set
             {
-            return chartered;
-            }
-
-        public bool charterVehicle()
-            {
-            chartered = true;
-
-            return chartered;
+                _modelPath = value;
             }
         }
-
-
+ 
+ 
+        private bool _isChartered = false;
+        public bool IsChartered
+        {
+            get
+            {
+                return _isChartered;
+            }
+ 
+            set
+            {
+                _isChartered = value;
+            }
+        }
+ 
+        public void CharterVehicle()
+        {
+            IsChartered = true;
+        }
+    }
+ 
+ 
     [System.Serializable]
     protected class Ship : Vehicle
         {
         public Ship() : base() 
             {
             description = "A ship lies at anchor.";
-            modelPath = "Models/Caravel";
+            ModelPath = "Models/Caravel";
             }
-
+ 
         public override string getDescription()
             {
             string result = base.getDescription();
-
-            if (chartered)
-                result += "\n\nThis ship has been been chartered and you may come onboard!";
-            else
-                result += "\n\nYou may charter this ship if you can afford it";
-
+ 
+            result += IsChartered ? "\n\nThis ship has been chartered and you may come onboard!" : "\n\nYou may charter this ship if you can afford it";
+ 
             return result;
             }
         }
-
-
+ 
+ 
     [System.Serializable]
     protected class Caravel : Ship
         {
         public Caravel() : base() 
             {
             description = "A caravel lies at anchor.";
-            modelPath = "Models/Caravel";
+            ModelPath = "Models/Caravel";
             }
         }
-
-
+ 
+ 
     [System.Serializable]
     protected class Kogge : Ship
         {
         public Kogge() : base() 
             {
             description = "A kogge lies at anchor.";
-            modelPath = "Models/Kogge";
+            ModelPath = "Models/Kogge";
             }
         }
     }
-
-
+ 
+ 
