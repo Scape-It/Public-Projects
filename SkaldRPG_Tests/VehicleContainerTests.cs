@@ -16,6 +16,20 @@ namespace SkaldRPG_Test
         }
 
         [TestMethod]
+        public void MakeShip_Null_Test()
+        {
+            // Arrange and act
+            vehicleContainer.MakeShip(null);
+            Vehicle vehicle = vehicleContainer.GetVehicle();
+
+            // Assert
+            // We took the default switch\case condition, we should get a caravel not chartered.
+            Assert.AreEqual("Models/Caravel", vehicle.ModelPath);
+            Assert.IsTrue(vehicle.IsChartered == false);
+            Assert.AreEqual("A ship lies at anchor.\n\nYou may charter this ship if you can afford it", vehicle.getDescription());
+        }
+
+        [TestMethod]
         public void MakeShip_Bogus_Non_Chartered_Test()
         {
             // Arrange and act
@@ -53,6 +67,16 @@ namespace SkaldRPG_Test
             // Assert
             Assert.AreEqual("Models/Kogge", kogge_lowerCase.ModelPath);
             Assert.AreEqual(kogge_lowerCase.ModelPath, kogge_upperCase.ModelPath);
+        }
+
+        [TestMethod]
+        public void SetVehicle_Null_Test()
+        {
+            // Arrange and act
+            vehicleContainer.SetVehicle(null);
+
+            // Assert
+            Assert.IsNull(vehicleContainer.GetVehicle());
         }
 
         [TestMethod]

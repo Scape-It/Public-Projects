@@ -13,8 +13,9 @@ namespace SkaldRPG
         // https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions for all of these public methods and properties
         public void MakeShip(string type)
         {
-            // You could use a switch/case here, especially if you're going to add more
-            switch (type.ToUpper())
+            // Test for null parm of course
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#null-conditional-operators--and-
+            switch (type?.ToUpper())
             {
                 case "CARAVEL":
                     vehicle = new Caravel();
@@ -37,7 +38,8 @@ namespace SkaldRPG
 
         public void SetVehicle(VehicleContainer s)
         {
-            vehicle = s.TransferVehicle();
+            // Test for null parm of course
+            vehicle = s?.TransferVehicle();
         }
 
 
